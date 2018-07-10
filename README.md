@@ -355,7 +355,7 @@ api_url = https://myhost.example.com:9101
 debug = False
 ```
 
-### <a name="kubernetes"></a> Auth Method: LDAP
+### <a name="ldap"></a> Auth Method: LDAP
 
 LDAP is an auth method where you can authenticate against an existing LDAP
 server using username and password.
