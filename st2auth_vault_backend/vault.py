@@ -187,20 +187,20 @@ class VaultAuthenticationBackend(object):
 
     def _auth_app_id(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/app-id.html
-        client.auth_app_id(username, # app id
-                           password, # user id
+        client.auth_app_id(username,  # app id
+                           password,  # user id
                            **self._path_kwargs())
 
     def _auth_app_role(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/approle.html
-        client.auth_approle(username, # role id
-                            password, # secret id
+        client.auth_approle(username,  # role id
+                            password,  # secret id
                             **self._path_kwargs())
 
     def _auth_aws(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/aws.html
-        client.auth_aws_iam(username, # AWS_ACCESS_KEY
-                            password, # AWS_SECRET_ACCESS_KEY
+        client.auth_aws_iam(username,  # AWS_ACCESS_KEY
+                            password,  # AWS_SECRET_ACCESS_KEY
                             **self._path_kwargs())
 
     def _auth_azure(self, client, username, password):
@@ -213,7 +213,7 @@ class VaultAuthenticationBackend(object):
 
     def _auth_github(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/github.html
-        client.auth_github(password, # GitHub token
+        client.auth_github(password,  # GitHub token
                            **self._path_kwargs())
 
     def _auth_kubernetes(self, client, username, password):
@@ -235,7 +235,7 @@ class VaultAuthenticationBackend(object):
 
     def _auth_token(self, client, username, password):
         client.token = password
-        client.lookup_token() # throws if invalid
+        client.lookup_token()  # throws if invalid
 
     def _auth_userpass(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/userpass.html
