@@ -181,8 +181,10 @@ debug = False
 
 ### <a name="azure"></a> Auth Method: Azure
 
-Azure is an auth method where you can authenticate using an Azure role and JWT token.
-For more information on the AWS auth method, see the
+Azure is an auth method where you can authenticate against Azure Active Directory.
+This works by creating a role in Vault that maps a name to a set of tenant information.
+The password is a signed JWT token from Azure Active Directory.
+For more information on the Azure auth method, see the
 [Vault Azure documentation](https://www.vaultproject.io/docs/auth/azure.html).
 
 To utilize this method with StackStorm we will utilize the `username` and `password`
@@ -222,8 +224,10 @@ debug = False
 
 ### <a name="gcp"></a> Auth Method: GCP
 
-GCP is an auth method where you can authenticate using an Google Cloud Platform
-role and JWT token. For more information on the GCP auth method, see the
+GCP is an auth method where you can authenticate using Google credentials.
+This works by creating a role in Vault that maps a name to a set of tenant information.
+The password is a signed JWT token from the Google authentication entity.
+For more information on the GCP auth method, see the
 [Vault GCP documentation](https://www.vaultproject.io/docs/auth/gcp.html).
 
 To utilize this method with StackStorm we will utilize the `username` and `password`
@@ -284,13 +288,13 @@ parameters for this auth method:
 Here's an example of authenticating, using this auth method, with a `curl` command:
 
 ``` shell
-curl -k -X POST -u nouser:<token> https://stackstorm.domain.tld/auth/v1/tokens
+curl -k -X POST -u unused:<token> https://stackstorm.domain.tld/auth/v1/tokens
 ```
 
 Here's an example of authenticating, using this auth method, with the `st2 login` command:
 
 ``` shell
-$ st2 login nouser
+$ st2 login unused
 Password: <token>
 ```
 
@@ -309,18 +313,21 @@ debug = False
 
 ### <a name="kubernetes"></a> Auth Method: Kubernetes
 
-Kubernetes is an auth method where you can authenticate using an Google Cloud Platform
-role and JWT token. For more information on the GCP auth method, see the
-[Vault GCP documentation](https://www.vaultproject.io/docs/auth/gcp.html).
+Kubernetes is an auth method where you can authenticate against a Kubernetes cluster
+Service Account Token.
+This works by creating a role in Vault that maps a name to the service account information.
+The password is a signed JWT token for the Kubernetes service account.
+For more information on the Kubernetes auth method, see the
+[Vault Kubernetes documentation](https://www.vaultproject.io/docs/auth/kubernetes.html).
 
 To utilize this method with StackStorm we will utilize the `username` and `password`
 parameters passed into the `st2auth` service and map them to the following 
 parameters for this  auth method:
 
-| st2auth param | GCP param |
-|---------------|-----------|
-| username      | role_name |
-| password      | jwt_token |
+| st2auth param | Kubernetes param |
+|---------------|------------------|
+| username      | role_name        |
+| password      | jwt_token        |
 
 Here's an example of authenticating, using this auth method, with a `curl` command:
 
@@ -341,16 +348,222 @@ The configuration for this auth method will look like the following:
 [auth]
 mode = standalone
 backend = vault
-backend_kwargs = {"vault_url": "https://vault.domain.tld:8200", "auth_method": "gcp"}
+backend_kwargs = {"vault_url": "https://vault.domain.tld:8200", "auth_method": "kubernetes"}
 enable = True
 logging = /path/to/st2auth.logging.conf
 api_url = https://myhost.example.com:9101
 debug = False
 ```
 
-* [kubernetes](https://www.vaultproject.io/docs/auth/kubernetes.html)
-* [ldap](https://www.vaultproject.io/docs/auth/ldap.html)
-* [okta](https://www.vaultproject.io/docs/auth/okta.html)
-* [radius](https://www.vaultproject.io/docs/auth/radius.html)
-* [token](https://www.vaultproject.io/docs/auth/token.html)
-* [userpass](https://www.vaultproject.io/docs/auth/userpass.html)
+### <a name="kubernetes"></a> Auth Method: LDAP
+
+LDAP is an auth method where you can authenticate against an existing LDAP
+server using username and password.
+LDAP binding information is configured within Vault when setting up the auth method.
+For more information on the LDAP auth method, see the
+[Vault LDAP documentation](https://www.vaultproject.io/docs/auth/ldap.html).
+
+To utilize this method with StackStorm we will utilize the `username` and `password`
+parameters passed into the `st2auth` service and map them to the following 
+parameters for this  auth method:
+
+| st2auth param | LDAP param |
+|---------------|------------|
+| username      | username   |
+| password      | password   |
+
+Here's an example of authenticating, using this auth method, with a `curl` command:
+
+``` shell
+curl -k -X POST -u <username>:<password> https://stackstorm.domain.tld/auth/v1/tokens
+```
+
+Here's an example of authenticating, using this auth method, with the `st2 login` command:
+
+``` shell
+$ st2 login <username>
+Password: <password>
+```
+
+The configuration for this auth method will look like the following:
+
+```
+[auth]
+mode = standalone
+backend = vault
+backend_kwargs = {"vault_url": "https://vault.domain.tld:8200", "auth_method": "ldap"}
+enable = True
+logging = /path/to/st2auth.logging.conf
+api_url = https://myhost.example.com:9101
+debug = False
+```
+
+### <a name="okta"></a> Auth Method: Okta
+
+Okta is an auth method where you can authenticate against the Okta authentication
+service using a username and password.
+Okta account information is configured within Vault when setting up the auth method.
+For more information on the Okta auth method, see the
+[Vault Okta documentation](https://www.vaultproject.io/docs/auth/okta.html).
+
+To utilize this method with StackStorm we will utilize the `username` and `password`
+parameters passed into the `st2auth` service and map them to the following 
+parameters for this  auth method:
+
+| st2auth param | Okta param |
+|---------------|------------|
+| username      | username   |
+| password      | password   |
+
+Here's an example of authenticating, using this auth method, with a `curl` command:
+
+``` shell
+curl -k -X POST -u <username>:<password> https://stackstorm.domain.tld/auth/v1/tokens
+```
+
+Here's an example of authenticating, using this auth method, with the `st2 login` command:
+
+``` shell
+$ st2 login <username>
+Password: <password>
+```
+
+The configuration for this auth method will look like the following:
+
+```
+[auth]
+mode = standalone
+backend = vault
+backend_kwargs = {"vault_url": "https://vault.domain.tld:8200", "auth_method": "okta"}
+enable = True
+logging = /path/to/st2auth.logging.conf
+api_url = https://myhost.example.com:9101
+debug = False
+```
+
+### <a name="radius"></a> Auth Method: RADIUS
+
+RADIUS is an auth method where you can authenticate against an existing RADIUS 
+server that accepts the PAP authentication scheme.
+RADIUS server information is configured within Vault when setting up the auth method.
+For more information on the Radius auth method, see the
+[Vault Radius documentation](https://www.vaultproject.io/docs/auth/radius.html).
+
+To utilize this method with StackStorm we will utilize the `username` and `password`
+parameters passed into the `st2auth` service and map them to the following 
+parameters for this  auth method:
+
+| st2auth param | RADIUS param |
+|---------------|--------------|
+| username      | username    |
+| password      | password    |
+
+Here's an example of authenticating, using this auth method, with a `curl` command:
+
+``` shell
+curl -k -X POST -u <username>:<password> https://stackstorm.domain.tld/auth/v1/tokens
+```
+
+Here's an example of authenticating, using this auth method, with the `st2 login` command:
+
+``` shell
+$ st2 login <username>
+Password: <password>
+```
+
+The configuration for this auth method will look like the following:
+
+```
+[auth]
+mode = standalone
+backend = vault
+backend_kwargs = {"vault_url": "https://vault.domain.tld:8200", "auth_method": "radius"}
+enable = True
+logging = /path/to/st2auth.logging.conf
+api_url = https://myhost.example.com:9101
+debug = False
+```
+
+### <a name="token"></a> Auth Method: Token
+
+Token is an auth method where you can authenticate using a Vault Token (built-in).
+For more information on the Token auth method, see the
+[Vault Token documentation](https://www.vaultproject.io/docs/auth/token.html).
+
+To utilize this method with StackStorm we will utilize the `username` and `password`
+parameters passed into the `st2auth` service and map them to the following 
+parameters for this  auth method:
+
+| st2auth param | Token param |
+|---------------|-------------|
+| username      | <unused>  |
+| password      | token       |
+
+Here's an example of authenticating, using this auth method, with a `curl` command:
+
+``` shell
+curl -k -X POST -u unused:<token> https://stackstorm.domain.tld/auth/v1/tokens
+```
+
+Here's an example of authenticating, using this auth method, with the `st2 login` command:
+
+``` shell
+$ st2 login unused
+Password: <token>
+```
+
+The configuration for this auth method will look like the following:
+
+```
+[auth]
+mode = standalone
+backend = vault
+backend_kwargs = {"vault_url": "https://vault.domain.tld:8200", "auth_method": "token"}
+enable = True
+logging = /path/to/st2auth.logging.conf
+api_url = https://myhost.example.com:9101
+debug = False
+```
+
+### <a name="userpass"></a> Auth Method: Userpass
+
+Userpass is an auth method where you can authenticate using a Vault uername
+and password.
+For more information on the Userpass auth method, see the
+[Vault Userpass documentation](https://www.vaultproject.io/docs/auth/userpass.html).
+
+To utilize this method with StackStorm we will utilize the `username` and `password`
+parameters passed into the `st2auth` service and map them to the following 
+parameters for this  auth method:
+
+| st2auth param | Userpass param |
+|---------------|----------------|
+| username      | username       |
+| password      | password       |
+
+Here's an example of authenticating, using this auth method, with a `curl` command:
+
+``` shell
+curl -k -X POST -u <username>:<password> https://stackstorm.domain.tld/auth/v1/token
+```
+
+Here's an example of authenticating, using this auth method, with the `st2 login` command:
+
+``` shell
+$ st2 login <username>
+Password: <password>
+```
+
+The configuration for this auth method will look like the following:
+
+```
+[auth]
+mode = standalone
+backend = vault
+backend_kwargs = {"vault_url": "https://vault.domain.tld:8200", "auth_method": "userpass"}
+enable = True
+logging = /path/to/st2auth.logging.conf
+api_url = https://myhost.example.com:9101
+debug = False
+```
+
