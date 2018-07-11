@@ -596,3 +596,55 @@ To stop the container:
 vagrant destroy
 ```
 
+#### Development - Unit tests
+
+Unit tests do not require the Vault container, instead the API is mocked out.
+To execute the unit tests we'll setup a virtualenv, install tox, then run tox.
+
+``` shell
+virtualenv virtualenv
+source ./virtualenv/bin/activate
+pip install tox
+tox -e py27
+```
+
+You can also run the linting tests, after the virtualenv is activated:
+
+``` shell
+tox -e lint
+```
+
+Or, you can run them both together:
+
+``` shell
+tox -e py27,lint
+```
+
+#### Development - Integration tests
+
+Our integration tests rely on an instance of Vault running in a Docker container
+that is started and managed by Vagrant. To execute these tests you will need
+the following installed:
+
+* Docker - install instructions [here](https://docs.docker.com/install/)
+* Vagrant - install instructions [here](https://www.vagrantup.com/docs/installation/)
+
+Once these dependencies have been installed we will tell Vagrant to start up
+our Vault container, and then execute our integration tests using tox (our
+virtualenv must be activated like above):
+
+```shell
+# start docker container with Vagrant
+vagrant up
+
+# setup virtualenv+tox
+virtualenv virtualenv
+source ./virtualenv/bin/activate
+pip install tox
+
+# run tests
+tox -e integration
+
+# stop docker container
+vagrant destroy
+```
