@@ -16,7 +16,7 @@
 import sys
 import httplib
 
-import unittest2
+import unittest
 import mock
 from requests.models import Response
 from six.moves.urllib.parse import urlparse
@@ -136,7 +136,7 @@ def _mock_vault_token_lookup(*args, **kwargs):
     return res
 
 
-class VaultAuthenticationBackendTestCase(unittest2.TestCase):
+class VaultAuthenticationBackendTestCase(unittest.TestCase):
 
 
     def test_init_default(self):
@@ -367,7 +367,6 @@ class VaultAuthenticationBackendTestCase(unittest2.TestCase):
     @mock.patch("requests.Session", side_effect=_mock_vault_session)
     def test_authenticate_aws(self, mock_session, mock_aws_iam, mock_is_authenticated):
         def _mock_auth_aws(*args, **kwargs):
-            print "args = {}".format(args)
             if args[0] == "good":
                 return True
             else:

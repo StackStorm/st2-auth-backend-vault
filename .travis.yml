@@ -6,9 +6,14 @@ os:
 env:
   - TOX_ENV=lint
   - TOX_ENV=py27
+  - TOX_ENV=integration VAULT_TOKEN="st2token" VAULT_ADDR="http://127.0.0.1:8200"
 
 install:
   - pip install tox
 
 script:
+  - if [ "$TOX_ENV" -eq "integration" ] sudo wget -nv https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_i686.deb
+  - if [ "$TOX_ENV" -eq "integration" ] sudo dpkg -i vagrant_2.1.2_i686.deb
+  - if [ "$TOX_ENV" -eq "integration" ] vagrant up
   - tox -e $TOX_ENV
+  - if [ "$TOX_ENV" -eq "integration" ] vagrant destroy

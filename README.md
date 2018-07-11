@@ -567,3 +567,32 @@ api_url = https://myhost.example.com:9101
 debug = False
 ```
 
+
+### Development
+
+To easily startup a Vault server simply run:
+
+``` shell
+vagrant up
+```
+
+This boots up a Docker container running Vault.
+
+You can run commands within this container like so:
+
+``` shell
+vagrant docker-exec -- vault status
+```
+
+If you, for some reason, need to enter the container simply run:
+
+``` shell
+vagrant docker-exec -it -- /bin/sh
+```
+
+To stop the container:
+
+``` shell
+vagrant destroy
+```
+
