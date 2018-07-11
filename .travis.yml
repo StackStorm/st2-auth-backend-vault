@@ -12,8 +12,8 @@ install:
   - pip install tox
 
 script:
-  - if [ "$TOX_ENV" -eq "integration" ]; then sudo wget -nv https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_i686.deb; fi
-  - if [ "$TOX_ENV" -eq "integration" ]; then sudo dpkg -i vagrant_2.1.2_i686.deb; fi
-  - if [ "$TOX_ENV" -eq "integration" ]; then vagrant up; fi
+  - if [ "$TOX_ENV" == "integration" ]; then sudo wget -nv https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_i686.deb; fi
+  - if [ "$TOX_ENV" == "integration" ]; then sudo dpkg -i vagrant_2.1.2_i686.deb; fi
+  - if [ "$TOX_ENV" == "integration" ]; then vagrant up; fi
   - tox -e $TOX_ENV
-  - if [ "$TOX_ENV" -eq "integration" ]; then vagrant destroy; fi
+  - if [ "$TOX_ENV" == "integration" ]; then vagrant destroy; fi
