@@ -14,5 +14,8 @@ install:
   - pip install tox
 
 script:
-  - if [ "$TOX_ENV" == "integration" ]; then docker run --name st2-auth-backend-vault_vault -d -e VAULT_DEV_ROOT_TOKEN_ID="$VAULT_TOKEN" -e VAULT_ADDR="$VAULT_ADDR" -p 127.0.0.1:8200:8200 --cap-add=IPC_LOCK vault; fi
+  - if [ "$TOX_ENV" == "integration" ]; then which ruby; fi
+  - if [ "$TOX_ENV" == "integration" ]; then vagrant up; fi
+  #   - if [ "$TOX_ENV" == "integration" ]; then docker run --name st2-auth-backend-vault_vault -d -e VAULT_DEV_ROOT_TOKEN_ID="$VAULT_TOKEN" -e VAULT_ADDR="$VAULT_ADDR" -p 127.0.0.1:8200:8200 --cap-add=IPC_LOCK vault; fi
   - tox -e $TOX_ENV
+  - if [ "$TOX_ENV" == "integration" ]; then vagrant destroy; fi
