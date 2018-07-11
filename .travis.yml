@@ -1,6 +1,6 @@
 language: python
 python: 2.7
-sudo: required
+sudo: true
 os:
   - linux
 env:
@@ -14,8 +14,9 @@ install:
   - pip install tox
 
 script:
-  - if [ "$TOX_ENV" == "integration" ]; then which ruby; fi
-  - if [ "$TOX_ENV" == "integration" ]; then vagrant up; fi
-  #   - if [ "$TOX_ENV" == "integration" ]; then docker run --name st2-auth-backend-vault_vault -d -e VAULT_DEV_ROOT_TOKEN_ID="$VAULT_TOKEN" -e VAULT_ADDR="$VAULT_ADDR" -p 127.0.0.1:8200:8200 --cap-add=IPC_LOCK vault; fi
+  - if [ "$TOX_ENV" == "integration" ]; then sudo wget -nv https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_i686.deb; fi
+  - if [ "$TOX_ENV" == "integration" ]; then sudo dpkg -i vagrant_2.1.2_i686.deb; fi
+  - if [ "$TOX_ENV" == "integration" ]; then sudo ln -s `which ruby` /opt/vagrant/embedded/bin/ruby; fi
+  - if [ "$TOX_ENV" == "integration" ]; then vagrant up;
   - tox -e $TOX_ENV
   - if [ "$TOX_ENV" == "integration" ]; then vagrant destroy; fi
