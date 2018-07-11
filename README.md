@@ -1,6 +1,6 @@
 # HashiCorp Vault authentication backend for StackStorm
 
-[![Build Status](https://api.travis-ci.org/StackStorm/st2-auth-backend-vault.svg?branch=master)](https://travis-ci.org/StackStorm/st2-auth-backend-vault) [![IRC](https://img.shields.io/irc/%23stackstorm.png)](http://webchat.freenode.net/?channels=stackstorm)
+[![Build Status](https://travis-ci.org/EncoreTechnologies/st2-auth-backend-vault.svg?branch=master)](https://travis-ci.org/EncoreTechnologies/st2-auth-backend-vault.svg?branch=master) [![Join our community Slack](https://stackstorm-community.herokuapp.com/badge.svg)](https://stackstorm.com/community-signup) [![Forum](https://img.shields.io/discourse/https/forum.stackstorm.com/posts.svg)](https://forum.stackstorm.com/)
 
 ## Overview
 
