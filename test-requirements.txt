@@ -1,0 +1,11 @@
+unittest2
+mock==3.0.5
+pep8==1.7.1
+flake8>=2.3.0,<2.4
+pylint==1.9.4
+pylint-plugin-utils>=0.4
+astroid==1.6.5
+nose>=1.3.7
+rednose
+nose-timer>=0.7.2,<0.8
+tox
