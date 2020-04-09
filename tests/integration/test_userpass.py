@@ -10,12 +10,12 @@ class TestVaultUserPass(BaseIntegrationTestCase):
     def setUp(self):
         super(TestVaultUserPass, self).setUp()
         client = self.create_client()
-        client.enable_auth_backend('userpass')
+        client.sys.enable_auth_method('userpass')
 
     def tearDown(self):
         super(TestVaultUserPass, self).tearDown()
         client = self.create_client()
-        client.disable_auth_backend('userpass')
+        client.sys.disable_auth_method('userpass')
 
     def test_userpass_good(self):
         client = self.create_client()

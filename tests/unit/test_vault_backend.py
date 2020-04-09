@@ -14,11 +14,11 @@
 # limitations under the License.
 
 import sys
-import httplib
 
 import unittest
 import mock
 from requests.models import Response
+from six.moves import http_client
 from six.moves.urllib.parse import urlparse
 
 from st2auth_vault_backend.vault import VaultAuthenticationBackend
@@ -30,7 +30,7 @@ def _mock_vault_session(*args, **kwargs):
 
 def _mock_vault_request(*args, **kwargs):
     # try to extract username from URL path
-    url = urlparse(args[1])
+    url = urlparse(kwargs['url'])
     path_parts = url.path.split("/")
     if url.path == "/v1/auth/token/lookup":
         return _mock_vault_token_lookup(*args, **kwargs)
@@ -43,17 +43,17 @@ def _mock_vault_request(*args, **kwargs):
 
 def _mock_vault_login(*args, **kwargs):
     return_codes = {
-        "good": httplib.OK,
-        "bad": httplib.BAD_REQUEST,
+        "good": http_client.OK,
+        "bad": http_client.BAD_REQUEST,
     }
     return_json = {
-        "good": '{"auth": {"client_token": "good_token"}}',
-        "bad": '{"errors":["invalid username or password"]}',
+        "good": b'{"auth": {"client_token": "good_token"}}',
+        "bad": b'{"errors":["invalid username or password"]}',
     }
     json = kwargs.get("json")
 
     # try to extract username from URL path
-    url = urlparse(args[1])
+    url = urlparse(kwargs['url'])
     path_parts = url.path.split("/")
 
     # if the last part of the path is "login",
@@ -81,7 +81,7 @@ def _mock_vault_login(*args, **kwargs):
 
     if not username:
         raise Exception("Unable to find username for URL {} with body: {}"
-                        .format(args[1], json))
+                        .format(kwargs['url'], json))
 
     res = Response()
     res.status_code = return_codes[username]
@@ -92,14 +92,14 @@ def _mock_vault_login(*args, **kwargs):
 
 def _mock_vault_token_lookup_self(*args, **kwargs):
     return_codes = {
-        "good_token": httplib.OK,
+        "good_token": http_client.OK,
     }
     return_json = {
-        "good_token": '{"auth": {"client_token": "good_token"}}',
+        "good_token": b'{"auth": {"client_token": "good_token"}}',
     }
 
     headers = kwargs.get('headers')
-    code = httplib.BAD_REQUEST
+    code = http_client.BAD_REQUEST
     return_content = '{}'
     if return_codes.get(headers['X-Vault-Token']):
         code = return_codes[headers['X-Vault-Token']]
@@ -114,15 +114,15 @@ def _mock_vault_token_lookup_self(*args, **kwargs):
 
 def _mock_vault_token_lookup(*args, **kwargs):
     return_codes = {
-        "good_token": httplib.OK,
+        "good_token": http_client.OK,
     }
     return_json = {
-        "good_token": '{"auth": {"client_token": "good_token"}}',
+        "good_token": b'{"auth": {"client_token": "good_token"}}',
     }
     body = kwargs.get("json")
 
     headers = kwargs.get('headers')
-    code = httplib.BAD_REQUEST
+    code = http_client.BAD_REQUEST
     return_content = '{}'
     if return_codes.get(body['token']):
         code = return_codes[body['token']]
@@ -363,11 +363,11 @@ class VaultAuthenticationBackendTestCase(unittest.TestCase):
         self.assertFalse(backend.authenticate("bad", "password"))
 
     @mock.patch("hvac.Client.is_authenticated")
-    @mock.patch("hvac.Client.auth_aws_iam")
+    @mock.patch("hvac.api.auth_methods.aws.Aws.iam_login")
     @mock.patch("requests.Session", side_effect=_mock_vault_session)
     def test_authenticate_aws(self, mock_session, mock_aws_iam, mock_is_authenticated):
         def _mock_auth_aws(*args, **kwargs):
-            if args[0] == "good":
+            if kwargs['access_key'] == "good":
                 return True
             else:
                 raise Exception("bad auth")

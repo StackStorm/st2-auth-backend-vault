@@ -20,7 +20,8 @@ requirements: virtualenv
 	@echo "Start Time = `date --iso-8601=ns`"
 	. $(VIRTUALENV_DIR)/bin/activate; \
 	$(VIRTUALENV_DIR)/bin/pip install --cache-dir $(HOME)/.pip-cache --upgrade pip; \
-	$(VIRTUALENV_DIR)/bin/pip install --cache-dir $(HOME)/.pip-cache -q -r $(ROOT_DIR)/requirements.txt;
+	$(VIRTUALENV_DIR)/bin/pip install --cache-dir $(HOME)/.pip-cache -q -r $(ROOT_DIR)/requirements.txt; \
+	$(VIRTUALENV_DIR)/bin/pip install --cache-dir $(HOME)/.pip-cache -q -r $(ROOT_DIR)/test-requirements.txt;
 	@echo "End Time = `date --iso-8601=ns`"
 
 .PHONY: virtualenv

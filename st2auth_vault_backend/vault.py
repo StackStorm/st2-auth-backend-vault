@@ -166,72 +166,64 @@ class VaultAuthenticationBackend(object):
             kwargs_dict["mount_point"] = self._path
         return kwargs_dict
 
-    def _custom_auth_role_jwt(self, client, username, password, default_path):
-        "Auth with role=username and jwt=password"
-        mount_point = self._path if self._path else default_path
-        params = {
-            "role": username,
-            "jwt": password,
-        }
-        # POST /v1/auth/<path>/login
-        client.auth("/v1/auth/{0}/login".format(mount_point), json=params)
-
-    def _custom_auth_user_pass(self, client, username, password, default_path):
-        "Auth with username in URL and password in params"
-        mount_point = self._path if self._path else default_path
-        params = {
-            "password": password,
-        }
-        # POST /v1/auth/<path>/login/<username>
-        client.auth("/v1/auth/{0}/login/{1}".format(mount_point, username), json=params)
-
     def _auth_app_id(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/app-id.html
-        client.auth_app_id(username,  # app id
-                           password,  # user id
+        client.auth_app_id(app_id=username,  # app id
+                           user_id=password,  # user id
                            **self._path_kwargs())
 
     def _auth_app_role(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/approle.html
-        client.auth_approle(username,  # role id
-                            password,  # secret id
+        client.auth_approle(role_id=username,  # role id
+                            secret_id=password,  # secret id
                             **self._path_kwargs())
 
     def _auth_aws(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/aws.html
-        client.auth_aws_iam(username,  # AWS_ACCESS_KEY
-                            password,  # AWS_SECRET_ACCESS_KEY
-                            **self._path_kwargs())
+        client.auth.aws.iam_login(access_key=username,  # AWS_ACCESS_KEY
+                                  secret_key=password,  # AWS_SECRET_ACCESS_KEY
+                                  **self._path_kwargs())
 
     def _auth_azure(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/azure.html
-        self._custom_auth_role_jwt(client, username, password, "azure")
+        client.auth.azure.login(role=username,
+                                jwt=password,
+                                **self._path_kwargs())
 
     def _auth_gcp(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/gcp.html
-        self._custom_auth_role_jwt(client, username, password, "gcp")
+        client.auth.gcp.login(role=username,
+                              jwt=password,
+                              **self._path_kwargs())
 
     def _auth_github(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/github.html
-        client.auth_github(password,  # GitHub token
-                           **self._path_kwargs())
+        client.auth.github.login(token=password,  # GitHub token
+                                 **self._path_kwargs())
 
     def _auth_kubernetes(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/kubernetes.html
-        self._custom_auth_role_jwt(client, username, password, "kubernetes")
+        client.auth.kubernetes.login(role=username,
+                                     jwt=password,
+                                     **self._path_kwargs())
 
     def _auth_ldap(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/ldap.html
-        client.auth_ldap(username, password,
-                         **self._path_kwargs())
+        client.auth.ldap.login(username=username,
+                               password=password,
+                               **self._path_kwargs())
 
     def _auth_okta(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/okta.html
-        self._custom_auth_user_pass(client, username, password, "okta")
+        client.auth.okta.login(username=username,
+                               password=password,
+                               **self._path_kwargs())
 
     def _auth_radius(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/radius.html
-        self._custom_auth_user_pass(client, username, password, "radius")
+        client.auth.radius.login(username=username,
+                                 password=password,
+                                 **self._path_kwargs())
 
     def _auth_token(self, client, username, password):
         client.token = password
@@ -239,5 +231,9 @@ class VaultAuthenticationBackend(object):
 
     def _auth_userpass(self, client, username, password):
         # https://www.vaultproject.io/docs/auth/userpass.html
-        client.auth_userpass(username, password,
+        #
+        # note: don't use auth.userpass.login() yet because it calls an extra .json()
+        #       that breaks things (bug)
+        client.auth_userpass(username=username,
+                             password=password,
                              **self._path_kwargs())

@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from vault import VaultAuthenticationBackend
+from st2auth_vault_backend.vault import VaultAuthenticationBackend
 
 __all__ = [
     'VaultAuthenticationBackend'

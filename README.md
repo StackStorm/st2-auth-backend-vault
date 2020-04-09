@@ -605,7 +605,7 @@ To execute the unit tests we'll setup a virtualenv, install tox, then run tox.
 virtualenv virtualenv
 source ./virtualenv/bin/activate
 pip install tox
-tox -e py27
+tox -e py27,py36
 ```
 
 You can also run the linting tests, after the virtualenv is activated:
@@ -617,7 +617,7 @@ tox -e lint
 Or, you can run them both together:
 
 ``` shell
-tox -e py27,lint
+tox -e py27,py36,lint
 ```
 
 #### Development - Integration tests
