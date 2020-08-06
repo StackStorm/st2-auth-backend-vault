@@ -1,13 +1,13 @@
-unittest2
-mock==3.0.5
-pep8==1.7.1
-flake8>=2.3.0,<2.4
-pylint==1.9.4
-pylint-plugin-utils>=0.4
+astroid==1.6.5
 # fix isort dependency of pylint 1.9.4 by keeping it below its 5.x version
 isort>=4.2.5,<5
-astroid==1.6.5
+mock==3.0.5
+nose-timer==0.7.5
 nose>=1.3.7
+pep8==1.7.1
+pylint-plugin-utils>=0.4
+pylint==1.9.4
 rednose
-nose-timer>=0.7.2,<0.8
-tox
+st2flake8==0.1.0
+tox==3.14.1
+unittest2
