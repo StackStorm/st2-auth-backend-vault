@@ -63,7 +63,7 @@ jobs:
         pip install tox
     - name: Run tests
       run: |
-        tox -e {{ matrix.tox-env }}
+        tox -e ${{ matrix.tox-env }}
 
   unit-tests:
     needs: pre_job
@@ -117,8 +117,8 @@ jobs:
         pip install tox
     - name: Run vagrant
       run: |
-        sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.18/vagrant_2.2.18_amd64.deb
-        sudo dpkg -i vagrant_2.2.18_amd64.deb
+        sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.18/vagrant_2.2.18_x86_64.deb
+        sudo dpkg -i vagrant_2.2.18_x86_64.deb
         sudo rm /opt/vagrant/embedded/bin/ruby
         sudo ln -s `which ruby` /opt/vagrant/embedded/bin/ruby
         vagrant up
