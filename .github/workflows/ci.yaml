@@ -39,7 +39,7 @@ jobs:
 
   lint-tests:
     needs: pre_job
-      if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+      if: "${{ needs.pre_job.outputs.should_skip != 'true' }}"
       name: 'Lint checks - ${{ matrix.python-version }}'
       runs-on: ubuntu-latest
       strategy:
@@ -67,7 +67,7 @@ jobs:
 
   unit-tests:
     needs: pre_job
-      if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+      if: "${{ needs.pre_job.outputs.should_skip != 'true' }}"
       name: 'Unit tests - ${{ matrix.python-version }}'
       runs-on: ubuntu-latest
       strategy:
@@ -95,7 +95,7 @@ jobs:
 
   integration-tests:
     needs: pre_job
-      if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+      if: "${{ needs.pre_job.outputs.should_skip != 'true' }}"
       name: 'Integration tests - ${{ matrix.python-version }}'
       runs-on: ubuntu-latest
       strategy:
