@@ -9,5 +9,6 @@ pylint-plugin-utils>=0.4
 pylint==1.9.4
 rednose
 st2flake8==0.1.0
+flake8<5  # st2flake8 does not support flake8 5
 tox==3.14.1
 unittest2

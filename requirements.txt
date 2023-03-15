@@ -1,1 +1,1 @@
-hvac>=0.9.0
+hvac>=0.9.0,<1.0 # we are using deprecated auth methods removed in 1.0
