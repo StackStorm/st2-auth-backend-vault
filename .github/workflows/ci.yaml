@@ -26,7 +26,7 @@ jobs:
   # same file set which has already passed, etc.
   pre_job:
     name: Skip Duplicate Jobs Pre Job
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
     steps:
@@ -40,7 +40,7 @@ jobs:
     needs: pre_job
     if: "${{ needs.pre_job.outputs.should_skip != 'true' }}"
     name: 'Lint checks - ${{ matrix.python-version }}'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -68,7 +68,7 @@ jobs:
     needs: pre_job
     if: "${{ needs.pre_job.outputs.should_skip != 'true' }}"
     name: 'Unit tests - ${{ matrix.python-version }}'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -96,7 +96,7 @@ jobs:
     needs: pre_job
     if: "${{ needs.pre_job.outputs.should_skip != 'true' }}"
     name: 'Integration tests - ${{ matrix.python-version }}'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
