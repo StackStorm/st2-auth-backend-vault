@@ -16,7 +16,7 @@
 import logging
 import hvac
 
-from six.moves.urllib.parse import urlparse
+from urllib.parse import urlparse
 
 __all__ = [
     "VaultAuthenticationBackend"

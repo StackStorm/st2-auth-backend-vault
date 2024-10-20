@@ -14,12 +14,12 @@
 # limitations under the License.
 
 import sys
-
 import unittest
+from http.client
+from urllib.parse import urlparse
+
 import mock
 from requests.models import Response
-from six.moves import http_client
-from six.moves.urllib.parse import urlparse
 
 from st2auth_vault_backend.vault import VaultAuthenticationBackend
 
@@ -43,8 +43,8 @@ def _mock_vault_request(*args, **kwargs):
 
 def _mock_vault_login(*args, **kwargs):
     return_codes = {
-        "good": http_client.OK,
-        "bad": http_client.BAD_REQUEST,
+        "good": http.client.OK,
+        "bad": http.client.BAD_REQUEST,
     }
     return_json = {
         "good": b'{"auth": {"client_token": "good_token"}}',
@@ -92,14 +92,14 @@ def _mock_vault_login(*args, **kwargs):
 
 def _mock_vault_token_lookup_self(*args, **kwargs):
     return_codes = {
-        "good_token": http_client.OK,
+        "good_token": http.client.OK,
     }
     return_json = {
         "good_token": b'{"auth": {"client_token": "good_token"}}',
     }
 
     headers = kwargs.get('headers')
-    code = http_client.BAD_REQUEST
+    code = http.client.BAD_REQUEST
     return_content = '{}'
     if return_codes.get(headers['X-Vault-Token']):
         code = return_codes[headers['X-Vault-Token']]
@@ -114,7 +114,7 @@ def _mock_vault_token_lookup_self(*args, **kwargs):
 
 def _mock_vault_token_lookup(*args, **kwargs):
     return_codes = {
-        "good_token": http_client.OK,
+        "good_token": http.client.OK,
     }
     return_json = {
         "good_token": b'{"auth": {"client_token": "good_token"}}',
@@ -122,7 +122,7 @@ def _mock_vault_token_lookup(*args, **kwargs):
     body = kwargs.get("json")
 
     headers = kwargs.get('headers')
-    code = http_client.BAD_REQUEST
+    code = http.client.BAD_REQUEST
     return_content = '{}'
     if return_codes.get(body['token']):
         code = return_codes[body['token']]
