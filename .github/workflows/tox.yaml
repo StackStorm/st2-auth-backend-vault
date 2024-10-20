@@ -55,6 +55,14 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
+    services:
+      vault:
+        image: hashicorp/vault:1.14.8
+        ports:
+          - 8200:8200
+        env:
+          VAULT_DEV_ROOT_TOKEN_ID: st2token
+
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
@@ -66,14 +74,6 @@ jobs:
 
     - name: Install tox
       run: pip install --user tox
-
-    - name: Run vagrant
-      run: |
-        sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
-        sudo dpkg -i vagrant_2.2.7_x86_64.deb
-        sudo rm /opt/vagrant/embedded/bin/ruby
-        sudo ln -s `which ruby` /opt/vagrant/embedded/bin/ruby
-        vagrant up
 
     - name: Select tox env
       id: tox-env
