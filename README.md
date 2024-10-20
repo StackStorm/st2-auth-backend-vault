@@ -1,8 +1,6 @@
 # HashiCorp Vault authentication backend for StackStorm
 
-[![Build Status](https://github.com/StackStorm/st2-auth-backend-vault/actions/workflows/ci.yaml/badge.svg)](https://github.com/StackStorm/st2-auth-backend-vault/actions/workflows/ci.yaml)
-[![Join our community Slack](https://stackstorm-community.herokuapp.com/badge.svg)](https://stackstorm.com/community-signup)
-[![Forum](https://img.shields.io/discourse/https/forum.stackstorm.com/posts.svg)](https://forum.stackstorm.com/)
+[![Build Status](https://github.com/StackStorm/st2-auth-backend-vault/actions/workflows/tox.yaml/badge.svg)](https://github.com/StackStorm/st2-auth-backend-vault/actions/workflows/tox.yaml)
 
 ## Overview
 
