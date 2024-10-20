@@ -15,7 +15,7 @@
 
 import sys
 import unittest
-from http.client
+import http.client
 from urllib.parse import urlparse
 
 import mock
