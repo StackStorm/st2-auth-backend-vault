@@ -453,4 +453,4 @@ class VaultAuthenticationBackendTestCase(unittest.TestCase):
         self.assertFalse(backend.authenticate("bad", "password"))
 
 if __name__ == "__main__":
-    sys.exit(unittest2.main())
+    sys.exit(unittest.main())
